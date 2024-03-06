@@ -9,30 +9,53 @@ const products = [
   { id: 5, name: "Product 5", price: 50 },
 ];
 
-// DOM elements
-const productList = document.getElementById("product-list");
-
-// Render product list
+// Function to render products
 function renderProducts() {
-  products.forEach((product) => {
-    const li = document.createElement("li");
-    li.innerHTML = `${product.name} - $${product.price} <button class="add-to-cart-btn" data-id="${product.id}">Add to Cart</button>`;
-    productList.appendChild(li);
+  const productList = document.getElementById('product-list');
+  productList.innerHTML = '';
+  products.forEach(product => {
+    const listItem = document.createElement('li');
+    listItem.innerHTML = `
+      ${product.name} - $${product.price}
+      <button onclick="addToCart(${product.id})">Add to Cart</button>
+    `;
+    productList.appendChild(listItem);
   });
 }
 
-// Render cart list
-function renderCart() {}
+// Function to add a product to the cart
+function addToCart(productId) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+  
+  let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+  cart.push(product);
+  sessionStorage.setItem('cart', JSON.stringify(cart));
+  
+  renderCart();
+}
 
-// Add item to cart
-function addToCart(productId) {}
+// Function to render the shopping cart
+function renderCart() {
+  const cartList = document.getElementById('cart-list');
+  const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+  cartList.innerHTML = '';
+  cart.forEach(product => {
+    const listItem = document.createElement('li');
+    listItem.innerText =` ${product.name} - $${product.price}`;
+      
+	  
+    cartList.appendChild(listItem);
+  });
+}
 
-// Remove item from cart
-function removeFromCart(productId) {}
+// Function to clear the shopping cart
+function clearCart() {
+  sessionStorage.removeItem('cart');
+  renderCart();
+}
 
-// Clear cart
-function clearCart() {}
-
-// Initial render
+// Initial setup
 renderProducts();
 renderCart();
+document.getElementById('clear-cart-btn').addEventListener('click', clearCart);
