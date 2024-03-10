@@ -32,7 +32,7 @@ const products = [
         // If the product is already in the cart, increment its quantity
         cart[existingProductIndex].quantity++;
     } else {
-        // If the product is not in the cart, add it
+        // If the product is not in the cart, add it with quantity 1
         cart.push({ ...product, quantity: 1 });
     }
     sessionStorage.setItem('cart', JSON.stringify(cart));
